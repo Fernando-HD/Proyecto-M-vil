@@ -1,0 +1,318 @@
+{
+  "info": {
+    "name": "CoffeeCode API",
+    "description": "Coleccion de endpoints para el sistema CoffeeCode POS. Organizada por modulo: Cocina, Caja y Mesero. Incluye tambien Login y Usuarios como apoyo.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8080/api",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Autenticacion",
+      "item": [
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"user\": \"admin\",\n  \"passw\": \"12345678\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/login",
+              "host": ["{{base_url}}"],
+              "path": ["login"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Usuarios (CRUD Admin)",
+      "item": [
+        {
+          "name": "Listar Usuarios",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/usuarios",
+              "host": ["{{base_url}}"],
+              "path": ["usuarios"]
+            }
+          }
+        },
+        {
+          "name": "Crear Usuario",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre_completo\": \"Roque Aguirre\",\n  \"username\": \"Roque123M\",\n  \"rol\": \"Mesero\",\n  \"passw\": \"12345678\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/usuarios",
+              "host": ["{{base_url}}"],
+              "path": ["usuarios"]
+            }
+          }
+        },
+        {
+          "name": "Actualizar Usuario",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre_completo\": \"Roque Aguirre\",\n  \"username\": \"Roque123M\",\n  \"rol\": \"Mesero\",\n  \"passw\": \"nuevaPass123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/usuarios/1",
+              "host": ["{{base_url}}"],
+              "path": ["usuarios", "1"]
+            }
+          }
+        },
+        {
+          "name": "Eliminar Usuario",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{base_url}}/usuarios/1",
+              "host": ["{{base_url}}"],
+              "path": ["usuarios", "1"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Modulo Cocina",
+      "description": "Gestion de menu y suministros",
+      "item": [
+        {
+          "name": "Ver Menu",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/menu",
+              "host": ["{{base_url}}"],
+              "path": ["menu"]
+            }
+          }
+        },
+        {
+          "name": "Cambiar Disponibilidad de Producto",
+          "request": {
+            "method": "PUT",
+            "url": {
+              "raw": "{{base_url}}/menu/1/toggle",
+              "host": ["{{base_url}}"],
+              "path": ["menu", "1", "toggle"]
+            }
+          }
+        },
+        {
+          "name": "Ver Pedidos (para preparar)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/pedidos",
+              "host": ["{{base_url}}"],
+              "path": ["pedidos"]
+            }
+          }
+        },
+        {
+          "name": "Iniciar Preparacion de Pedido",
+          "request": {
+            "method": "PUT",
+            "url": {
+              "raw": "{{base_url}}/pedidos/1/estado?estado=preparing",
+              "host": ["{{base_url}}"],
+              "path": ["pedidos", "1", "estado"],
+              "query": [
+                { "key": "estado", "value": "preparing" }
+              ]
+            },
+            "description": "Al pasar a 'preparing' se descuentan automaticamente los insumos segun receta."
+          }
+        },
+        {
+          "name": "Finalizar Preparacion (Listo)",
+          "request": {
+            "method": "PUT",
+            "url": {
+              "raw": "{{base_url}}/pedidos/1/estado?estado=ready",
+              "host": ["{{base_url}}"],
+              "path": ["pedidos", "1", "estado"],
+              "query": [
+                { "key": "estado", "value": "ready" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Cancelar Pedido",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{base_url}}/pedidos/1",
+              "host": ["{{base_url}}"],
+              "path": ["pedidos", "1"]
+            }
+          }
+        },
+        {
+          "name": "Ver Insumos / Inventario",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/insumos",
+              "host": ["{{base_url}}"],
+              "path": ["insumos"]
+            }
+          }
+        },
+        {
+          "name": "Abastecer Insumo (Compra)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"cantidad\": 5,\n  \"costo\": 250.00\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/insumos/1/abastecer",
+              "host": ["{{base_url}}"],
+              "path": ["insumos", "1", "abastecer"]
+            },
+            "description": "Aumenta el stock del insumo y registra automaticamente un gasto en Caja."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Modulo Caja",
+      "description": "Gestion monetaria y compras",
+      "item": [
+        {
+          "name": "Ver Pedidos (para cobrar)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/pedidos",
+              "host": ["{{base_url}}"],
+              "path": ["pedidos"]
+            },
+            "description": "Filtrar en el cliente los que esten en estado 'ready' o 'paid'."
+          }
+        },
+        {
+          "name": "Marcar Pedido como Pagado",
+          "request": {
+            "method": "PUT",
+            "url": {
+              "raw": "{{base_url}}/pedidos/1/estado?estado=paid",
+              "host": ["{{base_url}}"],
+              "path": ["pedidos", "1", "estado"],
+              "query": [
+                { "key": "estado", "value": "paid" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Registrar Gasto / Salida de Efectivo",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"concepto\": \"Compra de Leche Entera 10L\",\n  \"monto\": 180.00\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/gastos",
+              "host": ["{{base_url}}"],
+              "path": ["gastos"]
+            }
+          }
+        },
+        {
+          "name": "Listar Gastos",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/gastos",
+              "host": ["{{base_url}}"],
+              "path": ["gastos"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Modulo Mesero",
+      "description": "Levantamiento de pedidos",
+      "item": [
+        {
+          "name": "Ver Menu Disponible",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/menu",
+              "host": ["{{base_url}}"],
+              "path": ["menu"]
+            }
+          }
+        },
+        {
+          "name": "Crear Pedido (Levantar Orden)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"usuario_id\": 2,\n  \"mesa\": \"05\",\n  \"items\": [\n    { \"producto_id\": 1, \"cantidad\": 2, \"precio_unitario\": 35.00 },\n    { \"producto_id\": 7, \"cantidad\": 1, \"precio_unitario\": 75.00 }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/pedidos",
+              "host": ["{{base_url}}"],
+              "path": ["pedidos"]
+            }
+          }
+        },
+        {
+          "name": "Ver Estado de Pedidos",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/pedidos",
+              "host": ["{{base_url}}"],
+              "path": ["pedidos"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
